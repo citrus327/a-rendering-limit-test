@@ -4,22 +4,27 @@ import { produce } from "immer";
 import _ from "lodash";
 
 const SIZE = 100;
+const INTERVAL = 100;
 
 interface SquareProps {
   value: Struct;
   onChange: () => void;
+  enableChildrenEvent: boolean;
 }
 
 function Square(props: SquareProps) {
+  const { enableChildrenEvent, value, onChange } = props;
+
   useEffect(() => {
+    if (!enableChildrenEvent) return;
     const timerId = setInterval(() => {
-      props.onChange();
-    }, 10);
+      onChange();
+    }, INTERVAL);
 
     return () => {
       clearInterval(timerId);
     };
-  }, []);
+  }, [enableChildrenEvent]);
 
   return (
     <div
@@ -33,53 +38,83 @@ function Square(props: SquareProps) {
         color: "white",
       }}
     >
-      {props.value.count}
+      {value.count}
     </div>
   );
 }
 
 const SubComp = () => {
   const [data, setData] = useState(generate2DArray(SIZE));
+  const [enableChildrenEvent, setEnableChildrenEvent] = useState(false);
 
-  // useEffect(() => {
-  //   const timerId = setInterval(() => {
-  //     setData((v) => {
-  //       return produce(v, (draft) => {
-  //         return _.shuffle(draft).map((row) => {
-  //           return _.shuffle(row);
-  //         });
-  //       });
-  //     });
-  //   }, 100);
+  useEffect(() => {
+    if (enableChildrenEvent) return;
+    const timerId = setInterval(() => {
+      setData(generate2DArray(SIZE));
+    }, INTERVAL);
 
-  //   return () => {
-  //     clearInterval(timerId);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [enableChildrenEvent]);
 
   return (
-    <div style={{ display: "flex", gap: "2px", flexFlow: "column" }}>
-      <input />
-      {data.map((o, i) => {
-        return (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "2px 2px" }}>
-            {o.map((v, j) => {
-              return (
-                <Square
-                  value={v}
-                  onChange={() => {
-                    setData((v) => {
-                      return produce(v, (draft) => {
-                        draft[i][j].count = (Math.random() * 100).toFixed();
+    <div style={{ display: "flex", flexFlow: "column", alignItems: "center" }}>
+      <div
+        style={{
+          padding: 20,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <label htmlFor="input">使用输入框检测用户输入卡顿情况 </label>
+        <input id="input" style={{ marginLeft: "12px" }} />
+        <button onClick={() => setEnableChildrenEvent((v) => !v)}>
+          {`当前是${
+            enableChildrenEvent ? "子组件调用" : "父组件调用"
+          }，点击切换`}
+        </button>
+      </div>
+      <div
+        style={{
+          width: "80vw",
+          height: "80vh",
+          display: "flex",
+          gap: "2px",
+          flexFlow: "column",
+          overflow: "auto",
+        }}
+      >
+        {data.map((o, i) => {
+          return (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "2px 2px",
+              }}
+            >
+              {o.map((v, j) => {
+                return (
+                  <Square
+                    value={v}
+                    enableChildrenEvent={enableChildrenEvent}
+                    onChange={() => {
+                      setData((v) => {
+                        return produce(v, (draft) => {
+                          draft[i][j].count = (Math.random() * 100).toFixed();
+                        });
+                        // return generate2DArray(SIZE);
                       });
-                    });
-                  }}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
+                    }}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
