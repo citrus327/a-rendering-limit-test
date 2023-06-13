@@ -1,11 +1,11 @@
-import { v1 } from "uuid";
+import _random from "lodash/random";
 
-export type Struct = { count: string; id: string };
-export const generate2DArray = (size: number) => {
+export type Struct = { count: number };
+export const rng = () => _random(0, 100);
+
+export const generate2DArray = (size: number): Struct[][] => {
   const row = Array<Struct[]>(size).fill(null!);
-
   return row.map((_) => {
-    const struct: Struct = { count: (Math.random() * 100).toFixed(), id: v1() };
-    return Array(size).fill(struct);
+    return Array(size).fill({ count: rng() });
   });
 };
