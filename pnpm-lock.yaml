@@ -6,9 +6,6 @@ importers:
 
   packages/react:
     dependencies:
-      '@types/lodash':
-        specifier: ^4.14.195
-        version: registry.npmmirror.com/@types/lodash@4.14.195
       immer:
         specifier: ^10.0.2
         version: registry.npmmirror.com/immer@10.0.2
@@ -25,6 +22,9 @@ importers:
         specifier: workspace:*
         version: link:../utils
     devDependencies:
+      '@types/lodash':
+        specifier: ^4.14.195
+        version: registry.npmmirror.com/@types/lodash@4.14.195
       '@types/react':
         specifier: ^18.0.37
         version: registry.npmmirror.com/@types/react@18.0.37
@@ -67,6 +67,9 @@ importers:
 
   packages/vue:
     dependencies:
+      utils:
+        specifier: workspace:*
+        version: link:../utils
       vue:
         specifier: ^3.2.47
         version: registry.npmmirror.com/vue@3.2.47
@@ -612,7 +615,7 @@ packages:
     resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.195.tgz}
     name: '@types/lodash'
     version: 4.14.195
-    dev: false
+    dev: true
 
   registry.npmmirror.com/@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/prop-types/-/prop-types-15.7.5.tgz}
