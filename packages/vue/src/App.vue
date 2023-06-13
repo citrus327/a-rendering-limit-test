@@ -1,12 +1,9 @@
 <script setup lang="ts">
-
+import Board from './components/Board.vue'
 </script>
 
 <template>
-  <div>
-   123
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <Board  />
 </template>
 
 <style scoped>
